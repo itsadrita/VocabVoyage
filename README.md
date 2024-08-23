@@ -1,30 +1,35 @@
-*VocabVoyage*
+# VocabVoyage
+
 VocabVoyage is an innovative platform designed to help students enhance their soft skills and prepare effectively for the GRE. By incorporating gamified flashcards, personalized tests, and a comprehensive learning system, VocabVoyage makes skill-building both fun and impactful.
 
-Tech Stack
-Backend: Django
-Frontend: HTML, CSS, JavaScript
-Database: SQLite (or any other Django-compatible database)
-Version Control: Git
+## Features
 
-Installation
-Prerequisites
-Python 3.x
-Django
-Git
-Steps
-Clone the repository:
-git clone https://github.com/your-username/VocabVoyage.git
-cd VocabVoyage
-Create a virtual environment and activate it:
-python -m venv venv
-source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+### 🎯 Flashcard Gamified Feature
+- **Engaging Flashcards**: Master GRE vocabulary with interactive flashcards that are designed to make learning fun and efficient.
+- **Gamification**: Earn points, unlock achievements, and stay motivated as you progress through different levels of difficulty.
 
-Install the dependencies:
-pip install -r requirements.txt
+### 📊 Personalized Tests
+- **Custom Tests**: Generate personalized tests based on your learning needs and progress.
 
-Run the development server:
-python manage.py runserver
+### 🌱 Soft Skills Enhancement
+- **Skill Development**: Learn and practice essential soft skills such as communication, teamwork, and problem-solving.
 
-Access the application:
-Open your web browser and navigate to http://127.0.0.1:8000/.
+## Tech Stack
+
+- **Backend**: Django
+- **Frontend**: HTML, CSS, JavaScript
+- **Database**: SQLite (or any other Django-compatible database)
+- **Version Control**: Git
+
+## Installation
+
+### Prerequisites
+- Python 3.x
+- Django
+- Git
+
+### Steps
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/your-username/VocabVoyage.git
+   cd VocabVoyage
