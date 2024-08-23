@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test 2</title>
+    <style>
+        /* Add your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 150%;
+            padding: 50px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-weight: bold;
+            margin-bottom: 10px;
+            margin-left: 0;
+        }
+
+        .options {
+            margin-bottom: 20px;
+        }
+
+        .option {
+            background-color: #ffffff;
+            border: 1px solid #cccccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .option.selected {
+            background-color: #b7fffe;
+        }
+
+        .option:hover {
+            background-color: #f0f0f0;
+        }
+
+        .correct {
+            background-color: #b7fffe;
+        }
+
+        .wrong {
+            background-color: #ef6f6f;
+        }
+
+        .sidebar {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Added CSS for the vocabulary link */
+        .vocabulary-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 35px 40px;
+            background-color: #57d7f4;
+            color: rgb(0, 2, 2);
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        /* Hover effect */
+        .vocabulary-link:hover {
+            background-color: #57d7f4;
+        }
+    
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Test 2</h1>
+        <div id="quiz">
+            <!-- Questions and options will be dynamically added here -->
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <button onclick="prevQuestion()">Previous Question</button>
+        <button onclick="nextQuestion()">Next Question</button>
+        <button onclick="showAnswers()">Show Answers</button>
+        <p id="timer">Time Left: --:--</p>
+        {% comment %} <a href="test.html"><button>Back</button></a> {% endcomment %}
+        <a href="{% url 'test' %}" class="test-link">Back</a>
+    </div>
+
+    <script>
+        // Add your JavaScript code for Test 1 below this comment
+        
+        // List of questions and answers for Test 1
+        var questions = [
+            "Question 1: What does 'abate' mean?",
+            "Question 2: What is the synonym for 'acerbic'?",
+            "Question 3: Choose the word that means ‘Not showing feelings’:?",
+            "Question 4: What is the meaning of the word 'ascend'?",
+            "Question 5: What is the synonym for 'aloof'? ",
+            "Question 6: Identify the word that means 'to make better; to improve'?",
+            "Question 7: What does ‘Affable’ mean? ",
+            "Question 8: What is the synonym for 'exuberant'? ",
+            "Question 9: Choose the word that means 'to soothe or calm'?",
+            "Question 10: Identify the word that means 'to gather or collect gradually'? ",
+            // Add more questions as needed
+        ];
+        
+        var options = [
+    // Options for Question 1
+    ["(a) Increase", "(b) Decrease", "(c) Remain constant", "(d) Disappear"],
+    // Options for Question 2
+    ["a) Bitter", "b) Sweet", "c) Sour", "d) Salty"],
+    // Options for Question 3
+    ["a) Apathetic", "b) Avid", "c) Abundant", "d) Adroit"],
+    // Options for Question 4
+    ["a) To move downward", "b) To worship", "c) To decrease", "d) To move upward"],
+    // Options for Question 5
+    ["a) Sociable", "b) Remote", "c) Approachable", "d) Friendly"],
+    // Options for Question 6
+    ["a) Aggravate", "b) Alleviate", "c) Ameliorate", "d) Agitate"],
+    // Options for Question 7
+    ["a) Hostile", "b) Rude", "c) Approachable", "d) Aloof"],
+    // Options for Question 8
+    ["a) Depressed", "b) Lively", "c) Calm", "d) Reserved"],
+    // Options for Question 9
+    ["a) Agitate", "b) Pacify", "c) Disturb", "d) Irritate"],
+    // Options for Question 10
+    ["a) Scatter", "b) Disperse", "c) Accumulate", "d) Distribute"]
+];
+
+        
+        var correct_answers = [
+            // Correct answer for Question 1
+            "(b) Decrease",
+ // Correct answer for Question 2
+            "(a) Bitter",
+ // Correct answer for Question 3
+            "(a) Apathetic",
+ // Correct answer for Question 4
+            "(d) To move upward",
+ // Correct answer for Question 5
+            "(b) Remote",
+ // Correct answer for Question 6
+            "(c) Ameliorate",
+ // Correct answer for Question 7
+            "(c) Approachable",
+ // Correct answer for Question 8
+            "(b) Lively",
+ // Correct answer for Question 9
+            "(b) Pacify",
+ // Correct answer for Question 10
+            "(c) Accumulate",
+        ];
+        
+        var user_answers = []; // Array to store user's answers
+        
+        var correct_count = 0; // Counter for correct answers
+        var wrong_count = 0; // Counter for wrong answers
+        
+        var current_question = 0; // Variable to track current question
+        var timerInterval; // Variable to store the timer interval
+        
+        // Function to display the current question and options
+        function displayQuestion(question_number) {
+            var quiz = document.getElementById("quiz");
+            quiz.innerHTML = ""; // Clear previous question and options
+            
+            // Display the question
+            var question = document.createElement("div");
+            question.className = "question";
+            question.innerHTML = questions[question_number];
+            quiz.appendChild(question);
+            
+            // Display options for the question
+            var options_div = document.createElement("div");
+            options_div.className = "options";
+            quiz.appendChild(options_div);
+            
+            for (var i = 0; i < options[question_number].length; i++) {
+                var option = document.createElement("div");
+                option.className = "option";
+                option.innerHTML = options[question_number][i];
+                option.addEventListener("click", function () {
+                    var selectedOption = document.querySelector('.option.selected');
+                    if (selectedOption) {
+                        selectedOption.classList.remove('selected');
+                    }
+                    this.classList.add('selected');
+                    user_answers[current_question] = this.innerHTML;
+                });
+                options_div.appendChild(option);
+            }
+        }
+        
+        // Function to move to the next question
+        function nextQuestion() {
+            current_question++;
+            if (current_question < questions.length) {
+                displayQuestion(current_question);
+            } else {
+                clearInterval(timerInterval); // Stop the timer
+                displayResults(); // Display results when all questions are answered
+            }
+        }
+        
+        // Function to move to the previous question
+        function prevQuestion() {
+            if (current_question > 0) {
+                current_question--;
+                displayQuestion(current_question);
+            }
+        }
+        
+        // Function to display the results after completing the test
+        function displayResults() {
+            var quiz = document.getElementById("quiz");
+            quiz.innerHTML = ""; // Clear the quiz area
+            
+            // Calculate correct and wrong counts
+            for (var i = 0; i < questions.length; i++) {
+                if (user_answers[i] === correct_answers[i]) {
+                    correct_count++;
+                } else {
+                    wrong_count++;
+                }
+            }          
+            // Display the results
+            var resultDiv = document.createElement("div");
+            resultDiv.innerHTML = "<h2>Test 2 Results</h2>" +
+                "<p>Correct Answers: " + correct_count + "</p>" +
+                "<p>Wrong Answers: " + wrong_count + "</p>";
+            quiz.appendChild(resultDiv);
+        }
+        
+    
+        
+        // Display the first question when the page loads
+        displayQuestion(current_question);
+        startTimer(300); // 5 minutes timer (300 seconds)
+        
+        // Function to show user answers after completing the test
+        function showAnswers() {
+            var quiz = document.getElementById("quiz");
+            quiz.innerHTML = ""; // Clear the quiz area
+            
+            // Display questions, user answers, and correct answers
+            for (var i = 0; i < questions.length; i++) {
+                var questionDiv = document.createElement("div");
+                questionDiv.className = "question";
+                questionDiv.innerHTML = questions[i];
+                
+                var userAnswerDiv = document.createElement("div");
+                userAnswerDiv.className = "user-answer";
+                userAnswerDiv.innerHTML = "Your Answer: " + user_answers[i];
+                if (user_answers[i] === correct_answers[i]) {
+                    userAnswerDiv.classList.add("correct");
+                } else {
+                    userAnswerDiv.classList.add("wrong");
+                }
+                
+                var correctAnswerDiv = document.createElement("div");
+                correctAnswerDiv.className = "correct-answer";
+                correctAnswerDiv.innerHTML = "Correct Answer: " + correct_answers[i];
+                
+                quiz.appendChild(questionDiv);
+                quiz.appendChild(userAnswerDiv);
+                quiz.appendChild(correctAnswerDiv);
+            }
+        }
+        
+    </script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test 2</title>
+    <style>
+
+        /* Add your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 150%;
+            padding: 50px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-weight: bold;
+            margin-bottom: 10px;
+            margin-left: 0;
+        }
+
+        .options {
+            margin-bottom: 20px;
+        }
+
+        .option {
+            background-color: #ffffff;
+            border: 1px solid #cccccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .option.selected {
+            background-color: #b7fffe;
+        }
+
+        .option:hover {
+            background-color: #f0f0f0;
+        }
+
+        .correct {
+            background-color: #b7fffe;
+        }
+
+        .wrong {
+            background-color: #ef6f6f;
+        }
+
+        .sidebar {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Added CSS for the vocabulary link */
+        .vocabulary-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 35px 40px;
+            background-color: #57d7f4;
+            color: rgb(0, 2, 2);
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        /* Hover effect */
+        .vocabulary-link:hover {
+            background-color: #57d7f4;
+        }
+    
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Test 2</h1>
+        <div id="quiz">
+            <!-- Questions and options will be dynamically added here -->
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <button onclick="nextQuestion()">Next Question</button>
+    </div>
+
+    <script>
+        // Add your JavaScript code for Test 1 below this comment
+        
+        // List of questions and answers for Test 1
+        
+        
+        var user_answers = []; // Array to store user's answers
+        
+        var correct_count = 0; // Counter for correct answers
+        var wrong_count = 0; // Counter for wrong answers
+        
+        var current_question = 0; // Variable to track current question
+        
+        // Function to display the current question and options
+        function displayQuestion(question_number) {
+            var quiz = document.getElementById("quiz");
+            quiz.innerHTML = ""; // Clear previous question and options
+            
+            // Display the question
+            var question = document.createElement("div");
+            question.className = "question";
+            question.innerHTML = questions[question_number];
+            quiz.appendChild(question);
+            
+            // Display options for the question
+            var options_div = document.createElement("div");
+            options_div.className = "options";
+            quiz.appendChild(options_div);
+            
+            for (var i = 0; i < options[question_number].length; i++) {
+                var option = document.createElement("div");
+                option.className = "option";
+                option.innerHTML = options[question_number][i];
+                option.addEventListener("click", function () {
+                    var selectedOption = document.querySelector('.option.selected');
+                    if (selectedOption) {
+                        selectedOption.classList.remove('selected');
+                    }
+                    this.classList.add('selected');
+                    user_answers[current_question] = this.innerHTML;
+                });
+                options_div.appendChild(option);
+            }
+        }
+        
+        // Function to move to the next question
+        function nextQuestion() {
+            current_question++;
+            if (current_question < questions.length) {
+                displayQuestion(current_question);
+            } else {
+                displayResults(); // Display results when all questions are answered
+            }
+        }
+        
+        // Function to display the results after completing the test
+        function displayResults() {
+            var quiz = document.getElementById("quiz");
+            quiz.innerHTML = ""; // Clear the quiz area
+            
+            // Calculate correct and wrong counts
+            for (var i = 0; i < questions.length; i++) {
+                if (user_answers[i] === correct_answers[i]) {
+                    correct_count++;
+                } else {
+                    wrong_count++;
+                }
+            }
+            
+            // Display the results
+            var resultDiv = document.createElement("div");
+            resultDiv.innerHTML = "<h2>Test 2 Results</h2>" +
+                "<p>Correct Answers: " + correct_count + "</p>" +
+                "<p>Wrong Answers: " + wrong_count + "</p>";
+            quiz.appendChild(resultDiv);
+        }
+        
+        // Display the first question when the page loads
+        displayQuestion(current_question);
+        
+    </script>
+</body>
+
+</html>
+ {% endcomment %}

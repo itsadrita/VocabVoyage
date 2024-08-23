@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VOCAB VOYAGE </title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .container {
+            max-width: 700px;
+            margin: auto;
+            padding: 20px;
+            border: 1 px solid #ddd;
+            border-radius: 5px;
+        }
+        .container h1{
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .container p{
+           text-align: center;
+           margin-bottom: 20px;
+        }
+        .topnav {
+  background-color: #03045e;
+  overflow: hidden;
+}
+        .topnav a {
+        float: left;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
+        }
+        
+.topnav a.right {
+  float: right;
+}
+        .topnav a:hover {
+        background-color: #03045e;
+        color: white;
+        }
+       .topnav a.active {
+       background-color: #03045e;
+       color: white;
+       }
+       .header {
+  padding: 20px;
+  text-align: center;
+  background: #00b4d8;
+  color: white;
+}
+.header h1 {
+  font-size: 50px;
+}
+p {text-align: center;}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VOCAB VOYAGE</h1>
+      </div>
+      
+    <div class="topnav">
+        
+        <a href="{% url 'profie' %}"><i class="fa fa-fw fa-home"></i>Home</a>
+        <a class="active" href="{% url 'about' %}"><i class="fa fa-fw fa-user"></i>About</a>
+        <a href="login.html" class="right"><i class="fa fa-fw fa-mail-forward"></i>Log Out</a>
+      </div>
+      <div class="container">
+        <p><strong>Student Profile</strong></p>
+        <h2>Hello, Jhalak Dedhia</h2>
+        <h3>Your Profile</h3>
+        <p>Username: Jhalak.D</p>
+        <!-- <h3>Tests Attempted</h3>
+        <ul>
+            <li>Test 1</li>
+            <li>Test 2</li>
+            <li>Test 3</li>
+            <li>Test 4</li>
+            <li>Test 5</li>
+             Add more tests as needed -->
+        <!-- </ul> --> 
+        
+       </div>
+</body>
+</html>

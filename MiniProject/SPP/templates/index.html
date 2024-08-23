@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flip Cards</title>
+    <link rel="stylesheet" href="{% static 'static_website/about.css' %}">
+    
+</head>
+<body>
+    <div class="container">
+        {% for word in words %}
+        <div class="flip-card" id="card{{ forloop.counter }}" {% if forloop.counter <= 6 %} style="display: block;" {% else %} style="display: none;" {% endif %}>            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <h1>{{ word.word }}</h1>
+                </div>
+                <div class="flip-card-back">
+                    <p>Word:{{ word.word }}</p>
+                    <p>Meaning:{{ word.meaning }}</p>
+                    <p>Synonyms:{{ word.synonyms }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <button class="shuffle-button" onclick="shuffleCards()">Shuffle</button>
+    
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search a word">
+        <button class="search-button" onclick="searchWord()">Search</button>
+    </div>
+        <script src="{% static 'static_website/flip-card.js' %}"></script>
+</body>
+</html>
