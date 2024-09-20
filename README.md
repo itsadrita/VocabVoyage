@@ -18,7 +18,7 @@ VocabVoyage is an innovative platform designed to help students enhance their so
 
 - **Backend**: Django
 - **Frontend**: HTML, CSS, JavaScript
-- **Database**: SQLite (or any other Django-compatible database)
+- **Database**: SQLite 
 - **Version Control**: Git
 
 ## Installation
